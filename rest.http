@@ -1,0 +1,11 @@
+@baseurl = http://localhost:3000
+
+### GET
+{{baseurl}}
+
+### GET woolworths
+{{baseurl}}/api/v1/price/woolworths/milk
+
+
+### get coles
+{{baseurl}}/api/v1/price/coles/milk

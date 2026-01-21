@@ -23,7 +23,7 @@ export const getWoolWorthCookie = async () => {
   let cookieObject;
   cookieObject = await Cookie.findOne({ name: "Woolworths" });
 
-  console.log(cookieObject.updatedAt);
+  console.log(cookieObject?.updatedAt);
   if (!cookieObject || timeDifference(cookieObject?.updatedAt, 20)) {
     console.log("INSIDE");
     console.log("🔵 Launching Browser...");

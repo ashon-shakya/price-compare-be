@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors"; // 1. Import cors
 import dotenv from "dotenv"; // 2. Import dotenv to read .env files
 import router from "./src/routes/routes.js";
+import mongoose from "mongoose";
 
 // Initialize environment variables
 dotenv.config();
@@ -38,6 +39,15 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1", router);
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+mongoose
+  .connect(process.env.MONGODB_URL)
+  .then(() => {
+    console.log("DB Connected");
+    app.listen(3000, () => {
+      console.log("Server running on port 3000");
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+    console.log("DB Connection error!");
+  });

@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import fs from "fs-extra";
 import { shapeWoolworthsData } from "./helper.js";
-const woolworthDataShaper = (data) => {};
+import Cookie from "../models/cookie.js";
 
 const timeDifference = (pastDate, diff = 10) => {
   const now = new Date();
@@ -21,15 +21,10 @@ const timeDifference = (pastDate, diff = 10) => {
 // get cookie for woolies
 export const getWoolWorthCookie = async () => {
   let cookieObject;
-  cookieObject =
-    JSON.parse(fs.readFileSync("./data/woolworthCookie.json")) || undefined;
+  cookieObject = await Cookie.findOne({ name: "Woolworths" });
 
-  console.log(cookieObject);
-  if (
-    !cookieObject ||
-    !cookieObject.timestamp ||
-    timeDifference(cookieObject?.timestamp, 20)
-  ) {
+  console.log(cookieObject.updatedAt);
+  if (!cookieObject || timeDifference(cookieObject?.updatedAt, 20)) {
     console.log("INSIDE");
     console.log("🔵 Launching Browser...");
 
@@ -70,15 +65,17 @@ export const getWoolWorthCookie = async () => {
       console.log("\n✅ SUCCESS! Here is your Cookie String:\n");
       console.log("---------------------------------------------------");
 
-      cookieObject = {
-        timestamp: new Date(),
-        cookie: cookieString,
-      };
-
-      await fs.writeFile(
-        "./data/woolworthCookie.json",
-        JSON.stringify(cookieObject),
+      cookieObject = await Cookie.findOneAndUpdate(
+        { name: "Woolworths" }, // Filter
+        { $set: { cookie: cookieString } }, // Update
+        {
+          new: true, // Return the updated document
+          upsert: true, // Create the document if it doesn't exist
+          setDefaultsOnInsert: true, // Apply schema defaults if creating new
+        },
       );
+
+      console.log(cookieObject.updatedAt); // Now you can see when it was saved
       console.log("---------------------------------------------------");
     } catch (error) {
       console.error("❌ Error:", error.message);
@@ -87,6 +84,7 @@ export const getWoolWorthCookie = async () => {
       await browser.close();
     }
   }
+
   return cookieObject;
 };
 

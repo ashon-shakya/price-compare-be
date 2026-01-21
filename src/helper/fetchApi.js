@@ -156,7 +156,7 @@ export const fetchWoolworthPrice = async (searchTerm) => {
     return shapedData;
   } catch (err) {
     console.log(err.message);
-    return { error: true, message: "Failed to fetch data" };
+    return [];
   }
 };
 

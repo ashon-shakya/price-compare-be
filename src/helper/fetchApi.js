@@ -1,5 +1,7 @@
+import chromium from "@sparticuz/chromium";
+import puppeteerCore from "puppeteer-core";
 import puppeteer from "puppeteer";
-import fs from "fs-extra";
+
 import { shapeWoolworthsData } from "./helper.js";
 import Cookie from "../models/cookie.js";
 
@@ -30,10 +32,19 @@ export const getWoolWorthCookie = async () => {
 
     // Launch browser.
     // set headless: false if you want to see it happen (helps debugging)
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    const isLocal = process.env.NODE_ENV === "development";
+
+    const browser = isLocal
+      ? await puppeteer.launch({
+          headless: "new",
+          args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        })
+      : await puppeteer.launch({
+          args: chromium.args,
+          defaultViewport: chromium.defaultViewport,
+          executablePath: await chromium.executablePath(),
+          headless: chromium.headless,
+        });
 
     const page = await browser.newPage();
 

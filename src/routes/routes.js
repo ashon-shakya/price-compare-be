@@ -21,9 +21,8 @@ router.get("/price/:store/:searchTerm", async (req, res) => {
   }
   if (store === "coles" || store === "all") {
     // data.push("Coles DATA");
-    let colesData = await fetchColesPrice(searchTerm);
-    console.log(colesData);
-
+    // let colesData = await fetchColesPrice(searchTerm);
+    // console.log(colesData);
     // data = [...data, ...colesData];
   }
 

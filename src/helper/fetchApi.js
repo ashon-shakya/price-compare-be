@@ -21,12 +21,12 @@ const timeDifference = (pastDate, diff = 10) => {
 
 // Woolworth
 // get cookie for woolies
-export const getWoolWorthCookie = async () => {
+export const getWoolWorthCookie = async (update = false) => {
   let cookieObject;
   cookieObject = await Cookie.findOne({ name: "Woolworths" });
 
   console.log(cookieObject?.updatedAt);
-  if (!cookieObject || timeDifference(cookieObject?.updatedAt, 20)) {
+  if (update) {
     console.log("INSIDE");
     console.log("🔵 Launching Browser...");
 

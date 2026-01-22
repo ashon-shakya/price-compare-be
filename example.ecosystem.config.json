@@ -1,0 +1,17 @@
+{
+  "apps": [
+    {
+      "name": "cookie-scraper",
+      "script": "./src/scripts/scripts.js",
+      "cron_restart": "* * * * *",
+      "autorestart": false,
+      "exec_mode": "fork",
+      "instance": 1,
+      "max_memory_restart": "500M",
+      "env": {
+        "NODE_ENV": "production",
+        "MONGODB_URL": ""
+      }
+    }
+  ]
+}
